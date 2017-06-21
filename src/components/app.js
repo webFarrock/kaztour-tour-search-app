@@ -204,6 +204,8 @@ var Render = {
                             }
                         }
                     }
+
+
                 })
             });
 
@@ -779,9 +781,20 @@ export default class SearchResultApp extends Component {
             return item;
         });
 
+        let excludedDates = [];
+
+        if(window.RuInturistStore.HOT_TOURS && window.RuInturistStore.HOT_TOURS.excludedDates instanceof Array){
+			excludedDates = window.RuInturistStore.HOT_TOURS.excludedDates;
+        }
+
+
         stateStars = stateStars.length; // выбраны звезды или нет
 
         SEARCH_SORTED = _.filter(SEARCH_SORTED, function (item) {
+
+            if(excludedDates.indexOf(item.HotelLoadDate) !== -1){
+                return false;
+            }
 
             if(item.Board == 'ALL') item.Board = 'Все';
 

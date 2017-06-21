@@ -155,7 +155,7 @@ export default class HotelItem extends Component {
                                     <span className="button__cell">
                                         {beforeDiscountPrice ?
                                             <span className="button__cell">
-                                                <span className="button__price -discount">Цена со скидкой <b>{pricePrint}</b> тг</span>
+                                                <span className="button__price -discount">от <b>{pricePrint}</b> тг</span>
                                                 <span className="button__price__old -old"> {beforeDiscountPricePrint} тг</span>
                                             </span>
                                             :
