@@ -60,7 +60,7 @@ export default class HotelItem extends Component {
             var name_raw = this.props.hotel_info.NAME_RAW || '';
             var price = parseInt(this.props.item.Price);
             var pricePrint = number_format(this.props.item.Price, 0, ',', ' ');
-			let beforeDiscountPrice = price + (price * discount / 100);
+			let beforeDiscountPrice = (price * 100)/(100 - discount);
 			let beforeDiscountPricePrint = number_format(beforeDiscountPrice, 0, ',', ' ');
 
             var TourDate = this.props.item.TourDate;
@@ -153,7 +153,7 @@ export default class HotelItem extends Component {
                             <a href={detailLink} className="button">
                                 <span className="button__row">
                                     <span className="button__cell">
-                                        {beforeDiscountPrice ?
+                                        {beforeDiscountPrice && discount ?
                                             <span className="button__cell">
                                                 <span className="button__price -discount">от <b>{pricePrint}</b> тг</span>
                                                 <span className="button__price__old -old"> {beforeDiscountPricePrint} тг</span>
