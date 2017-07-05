@@ -43,16 +43,18 @@ export default class HotelList extends Component {
 
         if(this.props.hotels_total > this.props.hotels.length){
             return (
-                <div className="loader">
-                    <a href="" onClick={this.handlerShowMore.bind(this)}  className="loader__link">посмотреть еще</a>
+                <div className="loader" onMouseDown={e => this.handlerShowMore(e)}>
+                    <a href="#"  className="loader__link">посмотреть еще</a>
                 </div>
             )
         }
     }
 
     handlerShowMore(e){
-        e.preventDefault();
         this.props.handleNextPage();
+		e.stopPropagation();
+		e.preventDefault();
+		return false;
     }
 
 }
