@@ -3,17 +3,22 @@ import { Component } from 'react';
 import {number_format} from './utils';
 export default class HotelItem extends Component {
 
-    hotelImages(images){
+    hotelImages(images, images_big){
 
         if(images.length){
+            var images_ar = [];
+            for(var i = 0; i < images.length; i++) {
+                images_ar.push({ src : images[i], raw : images_big[i]});
+            }
             var imgCnt = 1;
             return <div className="col__left hotel-card__image">
                 <div className="carousel carousel-in">
-                {_.map(images, (item) => {
-                    return (<div key={++imgCnt+item} className="carousel__item">
-                        <img src={item} alt=""/>
-                    </div>)
-                })}
+                    {_.map(images_ar, (item) => {
+
+                        return (<div key={++imgCnt+item} className="carousel__item">
+                            <img src={item.src} data-class='f-box' data-fancybox-src={item.raw} alt=""/>
+                        </div>)
+                    })}
                 </div>
             </div>
         }else{
@@ -24,6 +29,8 @@ export default class HotelItem extends Component {
     }
 
     render() {
+        
+        console.log('this.props: ', this.props);
 
         if (!this.props.hotel_info) {
             return (
@@ -34,7 +41,7 @@ export default class HotelItem extends Component {
 
             let discount = 0;
             if(window.RuInturistStore.HOT_TOURS && window.RuInturistStore.HOT_TOURS.discount){
-				discount = parseInt(window.RuInturistStore.HOT_TOURS.discount);
+                discount = parseInt(window.RuInturistStore.HOT_TOURS.discount);
             }
 
 
@@ -56,12 +63,14 @@ export default class HotelItem extends Component {
 
             var id = this.props.hotel_info.ID || [];
             var images = this.props.hotel_info.IMAGES || [];
+            var images_big = this.props.hotel_info.IMAGES_BIG || [];
             var name = this.props.hotel_info.NAME || '';
             var name_raw = this.props.hotel_info.NAME_RAW || '';
             var price = parseInt(this.props.item.Price);
             var pricePrint = number_format(this.props.item.Price, 0, ',', ' ');
-			let beforeDiscountPrice = (price * 100)/(100 - discount);
-			let beforeDiscountPricePrint = number_format(beforeDiscountPrice, 0, ',', ' ');
+            let beforeDiscountPrice = (price * 100)/(100 - discount);
+            let beforeDiscountPricePrint = number_format(beforeDiscountPrice, 0, ',', ' ');
+            let durationPrint = `${this.props.item.Duration}н/${this.props.item.Duration+1}д`;
 
             var TourDate = this.props.item.TourDate;
             var HotelLoad = this.props.item.HotelLoad || '';
@@ -90,7 +99,7 @@ export default class HotelItem extends Component {
             var stars_html = '';
 
             var detailLink = this.props.hotel_info.DETAIL_LINK;
-			detailLink = '/tour-search/?' + detailLink.split('?')[1];
+            detailLink = '/tour-search/?' + detailLink.split('?')[1];
 
             if (stars_int > 0) {
                 var classStars = "rating -star-" + stars_int;
@@ -113,16 +122,16 @@ export default class HotelItem extends Component {
             var hotel_view = '';
             if(this.props.hotel_info.HOTEL_VIEW){
                 hotel_view = <li className="list__item">
-                                <span className="list__label">Просмотрело за сутки</span>
-                                <b>{this.props.hotel_info.HOTEL_VIEW}</b>
-                            </li>;
+                    <span className="list__label">Просмотрело за сутки</span>
+                    <b>{this.props.hotel_info.HOTEL_VIEW}</b>
+                </li>;
             }
 
             return (
                 <li className="list__item">
 
                     <div className="row hotel-card"  data-hovel_info_id={this.props.item.HOTEL_INFO_ID}>
-                        {this.hotelImages(images)}
+                        {this.hotelImages(images, images_big)}
                         <div className="col__middle hotel-card__content">
                             {stars_html}
                             <h5 className="hotel-card__title">
@@ -138,6 +147,9 @@ export default class HotelItem extends Component {
                             </ul>
                             <div className="hotel-card__date">{TourDate}</div>
                             <div className="hotel-card__service">{minServices}</div>
+                            {beforeDiscountPrice && discount ?
+                                <div className="hotel-card__service">{durationPrint}</div> : ''
+                            }
                             <ul className="list hotel-card__links">
                                 <li className="list__item">
                                     <a href="javascript://" className="js-add-to-fav js-tooltip" data-id={id} title="Добавить в историю поиска">
@@ -172,4 +184,4 @@ export default class HotelItem extends Component {
         }
     }
 
-}
+}  

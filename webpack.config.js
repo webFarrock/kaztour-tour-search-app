@@ -7,6 +7,7 @@ var plugins = [];
 if(NODE_ENV != 'development'){
 	plugins.push(new webpack.optimize.UglifyJsPlugin({
 		beautify: false,
+
 		comments: false,
 		compress: {
 			sequences     : true,
